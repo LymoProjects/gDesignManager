@@ -3,6 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/ddliu/go-httpclient"
+	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"os"
 )
 
 // App struct
@@ -21,7 +24,34 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
+func (a *App) GetUserImgPath() string {
+	dialog, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{})
+
+	if err != nil {
+		return ""
+	}
+
+	return dialog
+}
+
+func (a *App) CommitUserImage(imgPath string, imgName string) string {
+	file, err := os.ReadFile(imgPath)
+
+	if err != nil {
+		fmt.Println("cannot open file")
+
+		return "cannot open file"
+	}
+
+	response, err := httpclient.
+		Begin().
+		WithHeader("operation", "addimg").
+		WithHeader("imagesrc", "images/"+imgName).
+		Post("http://localhost:9190", file)
+
+	if response.Header.Get("result") == "success" {
+		return response.Header.Get("result")
+	} else {
+		return response.Header.Get("reason")
+	}
 }

@@ -9,7 +9,7 @@ const userServer = "http://localhost:9190"
 let userName = ref("")
 let ifShowList = ref(false)
 
-const handleInsertBtn = async () => {
+const handleSelectBtn = async () => {
     if (userName.value === "") {
         return
     }
@@ -36,7 +36,7 @@ const handleDeleteBtn = async (name) => {
 <template>
     <NSpace size="large" justify="center">
         <NInput size="large" placeholder="请输入用户姓名" round v-model:value="userName"/>
-        <NButton size="large" type="primary" round ghost @click="handleInsertBtn">查询</NButton>
+        <NButton size="large" type="primary" round ghost @click="handleSelectBtn">查询</NButton>
     </NSpace>
 
     <NDivider />

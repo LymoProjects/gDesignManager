@@ -1,35 +1,49 @@
 <script setup>
-import {NButton, NSpace, NInput, NText, NDivider, useMessage} from "naive-ui";
+import {NButton, NSpace, NInput, NDivider, useMessage} from "naive-ui";
 import {ref} from "vue";
+import {CommitUserImage, GetUserImgPath} from "../../../../../wailsjs/go/main/App.js";
 
 const userSqlServerUrl = "http://localhost:9190"
+const imgSelectBtnDefault = "点击选择照片"
 
 const userName = ref("")
 const userPhone = ref("")
-const userImage = ref("")
+const userImage = ref(imgSelectBtnDefault)
 
 const msg = useMessage()
+
+// input D:/xxx/xxx/xxx.png
+// output xxx.png
+const getFileNameFromPath = (filePath) => {
+    const index = filePath.lastIndexOf("\\")
+
+    return filePath.substring(index + 1)
+}
 
 const makeObjFromUserInfo = () => {
     return {
         name : userName.value,
         phone : userPhone.value,
         id : "?",
-        imagesrc : "/images/" + document.getElementById("fileInput").files[0].name
+        imagesrc : "/images/" + getFileNameFromPath(userImage.value)
     }
 }
 
 const resetUserInfo = () => {
     userName.value = ""
     userPhone.value = ""
-    userImage.value = ""
+    userImage.value = imgSelectBtnDefault
 }
 
-const commitImage = async () => {
-    try {
+const handleSelectFileBtn = async () => {
+    const imgPath = await GetUserImgPath()
 
-    } catch (e) {
-        alert(e)
+    if (imgPath === "") {
+        msg.error("未能成功打开图片!")
+    } else {
+        msg.success("成功打开图片!")
+
+        userImage.value = imgPath
     }
 }
 
@@ -40,14 +54,25 @@ const commitUserInfo = async () => {
         return
     }
 
-    if (userImage.value === "") {
+    if (userImage.value === imgSelectBtnDefault) {
         msg.warning("用户照片不得为空!")
 
         return
     }
 
     try {
-        // todo get user image id from idServer.
+        const isOk = await CommitUserImage(userImage.value, getFileNameFromPath(userImage.value))
+
+        if (isOk === "success") {
+            msg.success("上传照片成功!")
+
+        } else {
+            msg.success("上传照片失败, 原因是: " + isOk)
+
+            return
+        }
+
+        //todo get user image id from idServer.
 
         const userSqlRes = await fetch(userSqlServerUrl, {
             method : "POST",
@@ -59,6 +84,8 @@ const commitUserInfo = async () => {
 
         if (userSqlRes.headers.get("result") === "success") {
             msg.success("添加用户成功!")
+
+            resetUserInfo()
         } else {
             const errorReason = userSqlRes.headers.get("reason")
 
@@ -67,10 +94,6 @@ const commitUserInfo = async () => {
     } catch (e) {
         alert(e)
     }
-
-    await commitImage()
-
-    resetUserInfo()
 }
 </script>
 
@@ -95,7 +118,9 @@ const commitUserInfo = async () => {
                 <NButton size="large" type="info" quaternary>
                     照片:
                 </NButton>
-                <NInput :input-props="{type : 'file', id : 'fileInput'}" size="large" placeholder="" :bordered="false" v-model:value="userImage"/>
+                <NButton size="large" dashed type="warning" @click="handleSelectFileBtn">
+                    {{userImage}}
+                </NButton>
             </NSpace>
             <NSpace size="large">
                 <NButton size="large" type="warning" secondary @click="resetUserInfo">
@@ -104,7 +129,6 @@ const commitUserInfo = async () => {
                 <NButton size="large" type="success" secondary @click="commitUserInfo">
                     提交
                 </NButton>
-                <NButton @click="commitImage">Test</NButton>
             </NSpace>
         </NSpace>
     </NSpace>

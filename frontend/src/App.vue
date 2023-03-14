@@ -1,5 +1,5 @@
 <script setup>
-    import {NSpace, NGrid, NGridItem, NScrollbar, NMessageProvider} from "naive-ui";
+import {NSpace, NGrid, NGridItem, NScrollbar, NMessageProvider, NConfigProvider, darkTheme, lightTheme} from "naive-ui";
     import {RouterView} from "vue-router";
 
     import GdMenu from "./components/sideComps/gdMenu.vue";
@@ -7,28 +7,37 @@
     import GdHeader from "./components/mainComps/gdHeader.vue";
 
     import {usePasswordStore} from "./stores/password";
+    import {useThemeStore} from "./stores/theme.js";
+    import {computed} from "vue";
 
     const passwordStore = usePasswordStore()
+    const themeStore = useThemeStore()
+
+    const getThemeMode = computed(() => {
+        return themeStore.lightMode ? lightTheme : darkTheme
+    })
 </script>
 
 <template>
-    <NMessageProvider>
-        <NGrid x-gap="12" :cols="4" item-responsive>
-            <NGridItem span="1">
-                <NSpace vertical>
-                    <GdTool />
-                    <GdMenu />
-                </NSpace>
-            </NGridItem>
+    <NConfigProvider :theme="getThemeMode">
+        <NMessageProvider>
+            <NGrid x-gap="12" :cols="4" item-responsive>
+                <NGridItem span="1">
+                    <NSpace vertical>
+                        <GdTool />
+                        <GdMenu />
+                    </NSpace>
+                </NGridItem>
 
-            <NGridItem span="3">
-                <NSpace vertical>
-                    <GdHeader />
-                    <NScrollbar trigger="none" style="max-height: 800px">
-                        <RouterView v-if="passwordStore.pwd === passwordStore.truePwd"></RouterView>
-                    </NScrollbar>
-                </NSpace>
-            </NGridItem>
-        </NGrid>
-    </NMessageProvider>
+                <NGridItem span="3">
+                    <NSpace vertical>
+                        <GdHeader />
+                        <NScrollbar trigger="none" style="max-height : 600px">
+                            <RouterView v-if="passwordStore.pwd === passwordStore.truePwd"></RouterView>
+                        </NScrollbar>
+                    </NSpace>
+                </NGridItem>
+            </NGrid>
+        </NMessageProvider>
+    </NConfigProvider>
 </template>
