@@ -39,9 +39,9 @@ const handleSelectFileBtn = async () => {
     const imgPath = await GetUserImgPath()
 
     if (imgPath === "") {
-        msg.error("未能成功打开图片!")
+        msg.error("未能成功选择图片!")
     } else {
-        msg.success("成功打开图片!")
+        msg.success("成功选择图片!")
 
         userImage.value = imgPath
     }

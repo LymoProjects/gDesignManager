@@ -1,21 +1,21 @@
 <script setup>
-import {NSpace, NGrid, NGridItem, NScrollbar, NMessageProvider, NConfigProvider, darkTheme, lightTheme} from "naive-ui";
-    import {RouterView} from "vue-router";
+import {darkTheme, lightTheme, NConfigProvider, NGrid, NGridItem, NMessageProvider, NScrollbar, NSpace} from "naive-ui";
+import {RouterView} from "vue-router";
 
-    import GdMenu from "./components/sideComps/gdMenu.vue";
-    import GdTool from "./components/sideComps/gdTool.vue";
-    import GdHeader from "./components/mainComps/gdHeader.vue";
+import GdMenu from "./components/sideComps/gdMenu.vue";
+import GdTool from "./components/sideComps/gdTool.vue";
+import GdHeader from "./components/mainComps/gdHeader.vue";
 
-    import {usePasswordStore} from "./stores/password";
-    import {useThemeStore} from "./stores/theme.js";
-    import {computed} from "vue";
+import {usePasswordStore} from "./stores/password";
+import {useThemeStore} from "./stores/theme.js";
+import {computed, ref} from "vue";
 
-    const passwordStore = usePasswordStore()
-    const themeStore = useThemeStore()
+const passwordStore = usePasswordStore()
+const themeStore = useThemeStore()
 
-    const getThemeMode = computed(() => {
-        return themeStore.lightMode ? lightTheme : darkTheme
-    })
+const getThemeMode = computed(() => {
+    return themeStore.lightMode ? lightTheme : darkTheme
+})
 </script>
 
 <template>
@@ -24,14 +24,14 @@ import {NSpace, NGrid, NGridItem, NScrollbar, NMessageProvider, NConfigProvider,
             <NGrid x-gap="12" :cols="4" item-responsive>
                 <NGridItem span="1">
                     <NSpace vertical>
-                        <GdTool />
-                        <GdMenu />
+                        <GdTool/>
+                        <GdMenu/>
                     </NSpace>
                 </NGridItem>
 
                 <NGridItem span="3">
                     <NSpace vertical>
-                        <GdHeader />
+                        <GdHeader/>
                         <NScrollbar trigger="none" style="max-height : 600px">
                             <RouterView v-if="passwordStore.pwd === passwordStore.truePwd"></RouterView>
                         </NScrollbar>

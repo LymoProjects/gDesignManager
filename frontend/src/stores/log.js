@@ -17,8 +17,8 @@ export const useLogStore = defineStore("log", () => {
             if (sqlData.headers.get("result") === "success") {
                 let sqlDataObj = await sqlData.json()
 
-                if (sqlDataObj["userList"][0] !== undefined) {
-                    logList.value = sqlDataObj["userList"]
+                if (sqlDataObj["logList"][0] !== undefined) {
+                    logList.value = sqlDataObj["logList"]
                 }
             }
         } catch (e) {
@@ -39,8 +39,8 @@ export const useLogStore = defineStore("log", () => {
             if (sqlData.headers.get("result") === "success") {
                 let sqlDataObj = await sqlData.json()
 
-                if (sqlDataObj["userList"][0] !== undefined) {
-                    logList.value = sqlDataObj["userList"]
+                if (sqlDataObj["logList"][0] !== undefined) {
+                    logList.value = sqlDataObj["logList"]
                 }
             }
         } catch (e) {
@@ -50,6 +50,7 @@ export const useLogStore = defineStore("log", () => {
 
     return {
         logList,
-        getLogListFromServerByName
+        getLogListFromServerByName,
+        getLogListFromServerBySite
     }
 })
