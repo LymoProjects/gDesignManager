@@ -10,6 +10,8 @@ const userName = ref("")
 const userPhone = ref("")
 const userImage = ref(imgSelectBtnDefault)
 
+const userId = ref("")
+
 const msg = useMessage()
 
 // input D:/xxx/xxx/xxx.png
@@ -24,7 +26,7 @@ const makeObjFromUserInfo = () => {
     return {
         name : userName.value,
         phone : userPhone.value,
-        id : "?",
+        id : userId.value,
         imagesrc : "/images/" + getFileNameFromPath(userImage.value)
     }
 }
@@ -33,6 +35,7 @@ const resetUserInfo = () => {
     userName.value = ""
     userPhone.value = ""
     userImage.value = imgSelectBtnDefault
+    userId.value = ""
 }
 
 const handleSelectFileBtn = async () => {
