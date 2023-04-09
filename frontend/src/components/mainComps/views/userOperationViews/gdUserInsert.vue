@@ -85,22 +85,21 @@ const commitUserInfo = async () => {
         if (userSqlRes.headers.get("result") === "success") {
             msg.success("用户信息上传成功!")
 
+            await fetch(userSqlServerUrl, {
+                method: "POST",
+                headers: {
+                    "operation": "identify",
+                    "name" : userName.value,
+                    "imagesrc": "images/" + getFileNameFromPath(userImage.value)
+                }
+            })
+
             resetUserInfo()
         } else {
             const errorReason = userSqlRes.headers.get("reason")
 
             msg.error("上传失败, 原因是: " + errorReason)
-
-            return
         }
-
-        const generateImgFeature = await fetch(userSqlServerUrl, {
-            method : "POST",
-            headers : {
-                "operation" : "identify",
-                "imagesrc" : "images/" + getFileNameFromPath(userImage.value)
-            }
-        })
     } catch (e) {
         alert(e)
     }
