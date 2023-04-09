@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/ddliu/go-httpclient v0.7.1
-	github.com/wailsapp/wails/v2 v2.4.0
+	github.com/wailsapp/wails/v2 v2.4.1
 )
 
 require (

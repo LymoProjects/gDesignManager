@@ -73,10 +73,6 @@ const menuOptions = [
         key : "logOperationKey"
     },
     {
-        label : getMenuItemVNode("/identify", "用户鉴别"),
-        key : "identifyKey"
-    },
-    {
         label : getNormalMenuItemVNode("用户管理"),
         key : "userOperationKey",
         children : [

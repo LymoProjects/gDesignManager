@@ -28,7 +28,7 @@ const setWindowTheme = async () => {
         <template #header-extra>
             <NSpace size="large" justify="center">
                 <NText strong :depth="3">暗</NText>
-                <NSwitch :round="false" size="large" v-model:value="themeStore.lightMode" :on-update:value="setWindowTheme"/>
+                <NSwitch :round="false" size="large" v-bind:value="themeStore.lightMode" @update:value="setWindowTheme"/>
                 <NText strong :depth="3">亮</NText>
             </NSpace>
         </template>

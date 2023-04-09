@@ -1,5 +1,5 @@
 <script setup>
-import {NButton, NSpace, NInput, NList, NListItem, NDivider, NText, NAvatar} from "naive-ui";
+import {NButton, NSpace, NInput, NList, NListItem, NDivider, NText, NAvatar, useMessage} from "naive-ui";
 import {useUserStore} from "../../../../stores/user";
 import {ref} from "vue";
 
@@ -9,14 +9,20 @@ const userServer = "http://localhost:9190"
 let userName = ref("")
 let ifShowList = ref(false)
 
+const msg = useMessage()
+
 const handleSelectBtn = async () => {
     if (userName.value === "") {
+        msg.error("你需要输入用户的姓名!")
+
         return
     }
 
     ifShowList.value = true
 
     await userStore.getUserListFromServer(userName.value)
+
+    msg.success("查询完毕!")
 }
 
 const handleDeleteBtn = async (name) => {

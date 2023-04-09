@@ -10,8 +10,6 @@ const userName = ref("")
 const userPhone = ref("")
 const userImage = ref(imgSelectBtnDefault)
 
-const userId = ref("")
-
 const msg = useMessage()
 
 // input D:/xxx/xxx/xxx.png
@@ -26,7 +24,6 @@ const makeObjFromUserInfo = () => {
     return {
         name : userName.value,
         phone : userPhone.value,
-        id : userId.value,
         imagesrc : "/images/" + getFileNameFromPath(userImage.value)
     }
 }
@@ -35,7 +32,6 @@ const resetUserInfo = () => {
     userName.value = ""
     userPhone.value = ""
     userImage.value = imgSelectBtnDefault
-    userId.value = ""
 }
 
 const handleSelectFileBtn = async () => {
@@ -64,18 +60,19 @@ const commitUserInfo = async () => {
     }
 
     try {
+        msg.info("正在上传用户照片!")
+
         const isOk = await CommitUserImage(userImage.value, getFileNameFromPath(userImage.value))
 
         if (isOk === "success") {
             msg.success("上传照片成功!")
-
         } else {
-            msg.success("上传照片失败, 原因是: " + isOk)
+            msg.error("上传照片失败, 原因是: " + isOk)
 
             return
         }
 
-        //todo get user image id from idServer.
+        msg.info("正在上传用户信息!")
 
         const userSqlRes = await fetch(userSqlServerUrl, {
             method : "POST",
@@ -86,14 +83,24 @@ const commitUserInfo = async () => {
         })
 
         if (userSqlRes.headers.get("result") === "success") {
-            msg.success("添加用户成功!")
+            msg.success("用户信息上传成功!")
 
             resetUserInfo()
         } else {
             const errorReason = userSqlRes.headers.get("reason")
 
-            msg.error("添加用户失败, 原因是: " + errorReason)
+            msg.error("上传失败, 原因是: " + errorReason)
+
+            return
         }
+
+        const generateImgFeature = await fetch(userSqlServerUrl, {
+            method : "POST",
+            headers : {
+                "operation" : "identify",
+                "imagesrc" : "images/" + getFileNameFromPath(userImage.value)
+            }
+        })
     } catch (e) {
         alert(e)
     }

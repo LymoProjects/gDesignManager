@@ -49,6 +49,10 @@ func (a *App) CommitUserImage(imgPath string, imgName string) string {
 		WithHeader("imagesrc", "images/"+imgName).
 		Post("http://localhost:9190", file)
 
+	if err != nil {
+		return "无法连接到服务器!"
+	}
+
 	if response.Header.Get("result") == "success" {
 		return response.Header.Get("result")
 	} else {
