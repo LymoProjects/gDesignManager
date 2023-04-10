@@ -24,6 +24,7 @@ const makeObjFromUserInfo = () => {
     return {
         name : userName.value,
         phone : userPhone.value,
+        id : "/features/" + getFileNameFromPath(userImage.value),
         imagesrc : "/images/" + getFileNameFromPath(userImage.value)
     }
 }
@@ -85,12 +86,14 @@ const commitUserInfo = async () => {
         if (userSqlRes.headers.get("result") === "success") {
             msg.success("用户信息上传成功!")
 
+            let imgName = getFileNameFromPath(userImage.value)
+            imgName = imgName.substring(0, imgName.lastIndexOf("."))
+
             await fetch(userSqlServerUrl, {
                 method: "POST",
                 headers: {
                     "operation": "identify",
-                    "name" : userName.value,
-                    "imagesrc": "images/" + getFileNameFromPath(userImage.value)
+                    "img": imgName
                 }
             })
 
