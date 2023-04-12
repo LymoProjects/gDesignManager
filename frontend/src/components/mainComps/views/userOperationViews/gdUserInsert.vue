@@ -4,6 +4,7 @@ import {ref} from "vue";
 import {CommitUserImage, GetUserImgPath} from "../../../../../wailsjs/go/main/App.js";
 
 const userSqlServerUrl = "http://localhost:9190"
+const identifyServerUrl = "http://localhost:9193"
 const imgSelectBtnDefault = "点击选择照片"
 
 const userName = ref("")
@@ -21,10 +22,13 @@ const getFileNameFromPath = (filePath) => {
 }
 
 const makeObjFromUserInfo = () => {
+    let idBinPath = "/features/" + getFileNameFromPath(userImage.value)
+    idBinPath = idBinPath.replace(".jpg", ".bin")
+
     return {
         name : userName.value,
         phone : userPhone.value,
-        id : "/features/" + getFileNameFromPath(userImage.value),
+        id : idBinPath,
         imagesrc : "/images/" + getFileNameFromPath(userImage.value)
     }
 }
@@ -89,7 +93,7 @@ const commitUserInfo = async () => {
             let imgName = getFileNameFromPath(userImage.value)
             imgName = imgName.substring(0, imgName.lastIndexOf("."))
 
-            await fetch(userSqlServerUrl, {
+            await fetch(identifyServerUrl, {
                 method: "POST",
                 headers: {
                     "operation": "identify",

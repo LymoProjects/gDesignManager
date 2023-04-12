@@ -17,9 +17,11 @@ export const useUserStore = defineStore("user", () => {
             if (sqlData.headers.get("result") === "success") {
                 let sqlDataObj = await sqlData.json()
 
-                if (sqlDataObj["userList"][0] !== undefined) {
-                    userList.value = sqlDataObj["userList"]
-                }
+                userList.value = sqlDataObj["userList"]
+
+                // if (sqlDataObj["userList"][0] !== undefined) {
+                //     userList.value = sqlDataObj["userList"]
+                // }
             }
         } catch (e) {
             alert(e)

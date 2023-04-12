@@ -5,7 +5,8 @@ import {ref} from "vue";
 
 const userStore = useUserStore()
 
-const userServer = "http://localhost:9190"
+const userSqlServerUrl = "http://localhost:9190"
+const userImgServerUrl = "http://localhost:9191"
 let userName = ref("")
 let ifShowList = ref(false)
 
@@ -26,7 +27,7 @@ const handleSelectBtn = async () => {
 }
 
 const handleDeleteBtn = async (name) => {
-    await fetch(userServer, {
+    await fetch(userSqlServerUrl, {
         method : "POST",
         headers : {
             "operation" : "delete",
@@ -50,7 +51,7 @@ const handleDeleteBtn = async (name) => {
     <NList hoverable :show-divider="false" v-if="ifShowList" size="large">
         <NListItem v-for="(user, index) in userStore.userList" :key="index" hoverable :show-divider="false">
             <template #prefix>
-                <NAvatar size="large" :src="userServer + user['imagesrc']" fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" bordered/>
+                <NAvatar size="large" :src="userImgServerUrl + user['imagesrc']" fallback-src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" bordered/>
             </template>
 
             <template #suffix>

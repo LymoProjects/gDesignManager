@@ -6,7 +6,7 @@ export const useLogStore = defineStore("log", () => {
 
     const getLogListFromServerByName = async (userName) => {
         try {
-            const sqlData = await fetch("http://localhost:9190", {
+            const sqlData = await fetch("http://localhost:9192", {
                 method : "POST",
                 headers : {
                     "operation" : "getlogbyname",
@@ -17,9 +17,11 @@ export const useLogStore = defineStore("log", () => {
             if (sqlData.headers.get("result") === "success") {
                 let sqlDataObj = await sqlData.json()
 
-                if (sqlDataObj["logList"][0] !== undefined) {
-                    logList.value = sqlDataObj["logList"]
-                }
+                logList.value = sqlDataObj["logList"]
+
+                // if (sqlDataObj["logList"][0] !== undefined) {
+                //     logList.value = sqlDataObj["logList"]
+                // }
             }
         } catch (e) {
             alert(e)
@@ -28,7 +30,7 @@ export const useLogStore = defineStore("log", () => {
 
     const getLogListFromServerBySite = async (siteName) => {
         try {
-            const sqlData = await fetch("http://localhost:9190", {
+            const sqlData = await fetch("http://localhost:9192", {
                 method : "POST",
                 headers : {
                     "operation" : "getlogbysite",
@@ -39,9 +41,11 @@ export const useLogStore = defineStore("log", () => {
             if (sqlData.headers.get("result") === "success") {
                 let sqlDataObj = await sqlData.json()
 
-                if (sqlDataObj["logList"][0] !== undefined) {
-                    logList.value = sqlDataObj["logList"]
-                }
+                logList.value = sqlDataObj["logList"]
+
+                // if (sqlDataObj["logList"][0] !== undefined) {
+                //     logList.value = sqlDataObj["logList"]
+                // }
             }
         } catch (e) {
             alert(e)
